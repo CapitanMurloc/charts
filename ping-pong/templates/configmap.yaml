@@ -1,0 +1,12 @@
+{{- if .Values.env.configmap -}}
+{{- $stackname := .Release.Name -}}
+{{- $domain := .Values.global.domain -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-configmap
+data:
+  {{ range .Values.env.configmap }}
+  {{ .name }}: {{ .value | replace "STACKNAME" $stackname | replace "DOMAIN" $domain | quote }}
+  {{- end }}
+{{- end }}
